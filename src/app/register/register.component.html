@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">
+      <img src="../assets/images/default-logo.png">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/login">LOGIN</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">ABOUT</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container-fluid">
+    <div class="row no-gutter">
+  
+        <div class="col-md-6 bg-light">
+            <div class="login d-flex align-items-center py-5">
+  
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-7 mx-auto">
+                            <h3 class="display-4">REGISTER FORM</h3>
+                              <form>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input id="inputEmail" name="email" type="text" placeholder="Email address" class="form-control rounded-pill border-0 shadow-sm px-4" [(ngModel)]="register.email">
+                                </div>
+                                <!-- <div class="form-group mb-3">
+                                  <label class="form-label">First Name</label>
+                                  <input id="inputFirstName" name="firstname" type="text" placeholder="First Name" class="form-control rounded-pill border-0 shadow-sm px-4" [(ngModel)]="client.firstname">
+                                </div> -->
+                                <div class="form-group mb-3">
+                                  <label class="form-label">Nick Name</label>
+                                  <input id="inputLastName" name="nickname" type="text" placeholder="Nick Name" class="form-control rounded-pill border-0 shadow-sm px-4" [(ngModel)]="register.nickname">
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input id="inputPassword" name="password" type="password" placeholder="Password" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary" [(ngModel)]="register.password">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm" (click)="createUser()">Sign up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+  
+            </div>
+        </div>
+  
+        <div class="col-md-6 d-none d-md-flex bg-image"></div>
+  
+    </div>
+  </div>

@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" [href]="'http://' + env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.nickname">
+      <img src="../assets/images/default-logo.png">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="">MY DRIVE</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">SHARED WITH ME</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">STARRED</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">PUBLIC</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="">TRASH</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="logout()">LOGOUT</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  <button>
+
+  </button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Format</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let file of filesInfo" mat-raised-button target="_blank">
+        <th scope="row" (click)="open(file)">{{file.name}}</th>
+        <td (click)="open(file)">{{file.type}}</td>
+        <td (click)="open(file)">{{file.format}}</td>
+        <!-- <th scope="col"><a class="btn btn-default" href="http://192.168.16.56:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th> -->
+        <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" href="http://{{env.ipServer}}:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th>
+        <th *ngIf="file.isDirectory" scope="col"><button (click)="download(file)"  class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><i class="fa fa-download"></i></button></th> 
+        <th scope="col"><button  (click)="deleteDir(file)"><i class="fa fa-remove"></i></button></th>
+      </tr>
+    </tbody>
+  </table> 
