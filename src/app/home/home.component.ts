@@ -6,15 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { VideoComponent } from '../video/video.component';
 import { CookieService } from 'ngx-cookie-service';
 import { ImageComponent } from '../image/image.component';
-import { DomSanitizer } from '@angular/platform-browser';
-import JSZip from "jszip";
-// import FileSaver from "file-saver";
-import { saveAs, encodeBase64 } from '@progress/kendo-file-saver';
-import { HttpEventType } from '@angular/common/http';
-import { FileTemp } from '../file';
+import { DomSanitizer } from '@angular/platform-browser';;
 import { Environment } from '../environment';
 import { Observable, Subject } from 'rxjs';
-// import * as JSZip from 'jszip';
+import {LocalStorageService} from "../local-storage.service";
 
 
 @Component({
@@ -32,16 +27,14 @@ export class HomeComponent {
   nickname: string;
   path: string;
   private blobtemp: Blob;
-  private nickcookie: string;
-  private password: string;
+  private nickcookie;
+  private password;
   // private blobs: Array<FileTemp> = new Array();
-  base = "http://192.168.2.101:8989/stream?title="
-  // jsZip: JSZip = new JSZip();
-  // private fileUrl = any;
+  base = "http://192.168.2.101:8989/stream?title=";
 
-  constructor(private sanitizer: DomSanitizer,private matDialog: MatDialog,private cookieService: CookieService, private serviceFtp: FtpService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) { 
-    this.nickcookie = this.cookieService.get('nickname');
-    this.password = this.cookieService.get('password');
+  constructor(private localStorage: LocalStorageService, private sanitizer: DomSanitizer,private matDialog: MatDialog, private serviceFtp: FtpService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
+    this.nickcookie = this.localStorage.getItem("nickname");
+    this.password = this.localStorage.getItem("password");
     // if (this.cookieService.get('check') && ) {
     if (this.nickcookie != '' || this.password != '') {
       this.route.queryParams.subscribe(params => {
@@ -51,15 +44,14 @@ export class HomeComponent {
       if (this.nickcookie !== this.nickname) {
         router.navigate(['']);
       }
-      cookieService.set('check', 'true');
       this.getAll(this.path);
     } else {
       router.navigate(['']);
     }
   // }else {
-     
+
   // }
-    
+
   }
 
   getAll(path: string) {
@@ -162,7 +154,7 @@ export class HomeComponent {
   }
 
   logout() {
-    this.cookieService.deleteAll();
+    this.localStorage.clearAll();
     this.router.navigate(['']);
   }
 

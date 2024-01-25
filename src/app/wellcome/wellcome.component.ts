@@ -3,6 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Login } from '../login';
 import { Router } from '@angular/router';
 import { LoginService } from '../login.service';
+import {LocalStorageService} from "../local-storage.service";
 
 @Component({
   selector: 'app-wellcome',
@@ -15,9 +16,9 @@ export class WellcomeComponent {
   private password: string;
   login: Login = new Login();
 
-   constructor(private loginService: LoginService, private cookieService: CookieService, private router: Router) {
-    this.nickname = this.cookieService.get('nickname');
-    this.password = this.cookieService.get('password');
+   constructor(private loginService: LoginService, private localStorage: LocalStorageService, private router: Router) {
+    this.nickname = this.localStorage.getItem("nickname");
+    this.password = this.localStorage.getItem("password");
     if (this.nickname != '' && this.password != '') {
       this.login.nickname = this.nickname;
       this.login.password = this.password;
@@ -37,10 +38,9 @@ export class WellcomeComponent {
   loginUser() {
     this.loginService.loginUser(this.login).subscribe( data => {
       console.log(data);
-      this.cookieService.set('nickname', this.login.nickname);
-      this.cookieService.set('password', this.login.password);
+      this.localStorage.saveUser(this.login.nickname, this.login.password);
       this.goToHome(this.login.nickname);
-    }, error => console.log(error));  
+    }, error => console.log(error));
   }
 
 }
