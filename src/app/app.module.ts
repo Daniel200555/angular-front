@@ -16,6 +16,8 @@ import { ImageComponent } from './image/image.component';
 import { AboutComponent } from './about/about.component';
 import { CompressComponent } from './compress/compress.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { UploadFileComponent } from './upload-file/upload-file.component';
+import { UploadFolderComponent } from './upload-folder/upload-folder.component';
 // import { DocumentComponent } from './document/document.component';
 
 @NgModule({
@@ -29,7 +31,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ImageComponent,
     AboutComponent,
     CompressComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    UploadFileComponent,
+    UploadFolderComponent
   ],
   imports: [
     HttpClientModule,

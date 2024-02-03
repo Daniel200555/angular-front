@@ -61,6 +61,10 @@ export class FtpService {
     return this.httpClient.get<boolean>(this.base + 'delete/directory?path=' + path);
   }
 
+  uploadFile(nickname: String, path: string, form: FormData): Observable<any> {
+    return this.httpClient.post(this.base + 'uploadFile?nickname=' + nickname + '&path=' + path, form);
+  }
+
   // downloadZip(user: string, file: String): Observable<Blob> {
   //   return this.httpClient.get(this.base + 'dowload/zip?user=' + user + '&file=' + file);
   // }

@@ -5,7 +5,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-  
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
@@ -24,7 +24,11 @@
             <a class="nav-link" href="">TRASH</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" (click)="logout()">LOGOUT</a>
+<!--            <a class="nav-link" (click)="logout()">LOGOUT</a>-->
+          <button class="Btn1" (click)="logout()">
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            <div class="text">Logout</div>
+          </button>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
@@ -51,8 +55,50 @@
         <td (click)="open(file)">{{file.format}}</td>
         <!-- <th scope="col"><a class="btn btn-default" href="http://192.168.16.56:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th> -->
         <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" href="http://{{env.ipServer}}:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th>
-        <th *ngIf="file.isDirectory" scope="col"><button (click)="download(file)"  class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><i class="fa fa-download"></i></button></th> 
-        <th scope="col"><button  (click)="deleteDir(file)"><i class="fa fa-remove"></i></button></th>
+<!--        <th *ngIf="file.isDirectory" scope="col"><button (click)="download(file)"  class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><i class="fa fa-download"></i></button></th>-->
+        <th *ngIf="file.isDirectory" scope="col"><button class="Btn" (click)="download(file)">
+          <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
+          <span class="icon2"></span>
+          <span class="tooltip">Download</span>
+        </button></th>
+<!--        <th scope="col"><button  (click)="deleteDir(file)"><i class="fa fa-remove"></i></button></th>-->
+        <th scope="col"><button class="bin-button" (click)="deleteDir(file)">
+          <svg
+            class="bin-top"
+            viewBox="0 0 39 7"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
+            <line
+              x1="12"
+              y1="1.5"
+              x2="26.0357"
+              y2="1.5"
+              stroke="white"
+              stroke-width="3"
+            ></line>
+          </svg>
+          <svg
+            class="bin-bottom"
+            viewBox="0 0 33 39"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask id="path-1-inside-1_8_19" fill="white">
+              <path
+                d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
+              ></path>
+            </mask>
+            <path
+              d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
+              fill="white"
+              mask="url(#path-1-inside-1_8_19)"
+            ></path>
+            <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
+            <path d="M21 6V29" stroke="white" stroke-width="4"></path>
+          </svg>
+        </button></th>
       </tr>
     </tbody>
-  </table> 
+  </table>
