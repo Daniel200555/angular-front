@@ -61,8 +61,14 @@ export class FtpService {
     return this.httpClient.get<boolean>(this.base + 'delete/directory?path=' + path);
   }
 
-  uploadFile(nickname: String, path: string, form: FormData): Observable<any> {
-    return this.httpClient.post(this.base + 'uploadFile?nickname=' + nickname + '&path=' + path, form);
+  deleteFile(path: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(this.base + 'delete/file?path=' + path);
+  }
+
+  uploadFile(path: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    return this.httpClient.post(this.base + 'uploadFile?path=' + path, formData);
   }
 
   // downloadZip(user: string, file: String): Observable<Blob> {

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" [href]="'http://' + env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.nickname">
+    <a class="navbar-brand" [href]="'http://' + env.ipHost + '/home?nickname=' + this.nickname + '&path=' + this.nickname">
       <img src="../assets/images/default-logo.png">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,14 +32,60 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <div class="input-wrapper">
+          <button class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="25px" width="25px">
+              <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#fff" d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"></path>
+              <path stroke-linejoin="round" stroke-linecap="round" stroke-width="1.5" stroke="#fff" d="M22 22L20 20"></path>
+            </svg>
+          </button>
+          <input placeholder="search.." class="input" name="text" type="text">
+        </div>
       </form>
     </div>
   </nav>
-  <button>
-
-  </button>
+<div class="wrapper">
+  <input type="checkbox" id="toogle" class="hidden-trigger">
+  <label for="toogle" class="circle">
+    <svg class="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48" height="48" xml:space="preserve" version="1.1" viewBox="0 0 48 48">
+    <image width="48" height="48" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAbElEQVR4Ae3XwQnFQAiE4eVVsGAP1mkPFjwvQvYSWCQYCYGZv4Dv5MGB5ghcIiDQI+kCftCzNsAR8y5gYu2rwCBAgMBTgEC3rek2yQEtAZoDjso8AyaKexmIDJUZD40AAQIE0gwx449GgMC9/t0b7GTsa7J+AAAAAElFTkSuQmCC"></image>
+  </svg>
+  </label>
+  <div class="subs">
+    <button class="sub-circle" (click)="uploadOnlyFile()">
+      <input value="1" name="sub-circle" type="radio" id="sub1" class="hidden-sub-trigger">
+      <label for="sub1"></label>
+    </button>
+    <button class="sub-circle" (click)="uploadDirectory()">
+      <input value="1" name="sub-circle" type="radio" id="sub2" class="hidden-sub-trigger">
+      <label for="sub2"></label>
+    </button>
+    <button class="sub-circle">
+      <input value="1" name="sub-circle" type="radio" id="sub3" class="hidden-sub-trigger">
+      <label for="sub3"></label>
+    </button>
+<!--    <button class="sub-circle">-->
+<!--      <input value="1" name="sub-circle" type="radio" id="sub4" class="hidden-sub-trigger">-->
+<!--      <label for="sub4"></label>-->
+<!--    </button>-->
+<!--    <button class="sub-circle">-->
+<!--      <input value="1" name="sub-circle" type="radio" id="sub5" class="hidden-sub-trigger">-->
+<!--      <label for="sub5"></label>-->
+<!--    </button>-->
+<!--    <button class="sub-circle">-->
+<!--      <input value="1" name="sub-circle" type="radio" id="sub6" class="hidden-sub-trigger">-->
+<!--      <label for="sub6"></label>-->
+<!--    </button>-->
+<!--    <button class="sub-circle">-->
+<!--      <input value="1" name="sub-circle" type="radio" id="sub7" class="hidden-sub-trigger">-->
+<!--      <label for="sub7"></label>-->
+<!--    </button>-->
+<!--    <button class="sub-circle">-->
+<!--      <input value="1" name="sub-circle" type="radio" id="sub8" class="hidden-sub-trigger">-->
+<!--      <label for="sub8"></label>-->
+<!--    </button>-->
+  </div>
+</div>
   <table class="table">
     <thead>
       <tr>
@@ -53,16 +99,18 @@
         <th scope="row" (click)="open(file)">{{file.name}}</th>
         <td (click)="open(file)">{{file.type}}</td>
         <td (click)="open(file)">{{file.format}}</td>
-        <!-- <th scope="col"><a class="btn btn-default" href="http://192.168.16.56:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th> -->
-        <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" href="http://{{env.ipServer}}:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th>
-<!--        <th *ngIf="file.isDirectory" scope="col"><button (click)="download(file)"  class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><i class="fa fa-download"></i></button></th>-->
+<!--         <th scope="col"><a class="btn btn-default" href="http://192.168.2.102:8989/download?path={{file.path}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th>-->
+<!--        <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" (click)="downloadFile(file)"><i class="fa fa-download"></i></a></th>-->
+        <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" href="http://{{env.ipServer}}:8989/download?path={{encodeURIComponent(file.path)}}&name={{file.name}}" target="_blank"><i class="fa fa-download"></i></a></th>
+<!--        <th *ngIf="file.isFile" scope="col"><a class="btn btn-default" [href]="'http://' + {{env.ipServer}} + ':8989/download?path=' + encodeURIComponent(file.path) + '&name=' + file.name" ] target="_blank"><i class="fa fa-download"></i></a></th>-->
+        <!--        <th *ngIf="file.isDirectory" scope="col"><button (click)="download(file)"  class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><i class="fa fa-download"></i></button></th>-->
         <th *ngIf="file.isDirectory" scope="col"><button class="Btn" (click)="download(file)">
           <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
           <span class="icon2"></span>
           <span class="tooltip">Download</span>
         </button></th>
 <!--        <th scope="col"><button  (click)="deleteDir(file)"><i class="fa fa-remove"></i></button></th>-->
-        <th scope="col"><button class="bin-button" (click)="deleteDir(file)">
+        <th scope="col"><button class="bin-button" (click)="deleteFile(file)">
           <svg
             class="bin-top"
             viewBox="0 0 39 7"

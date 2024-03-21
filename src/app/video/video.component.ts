@@ -40,7 +40,7 @@ export class VideoComponent {
       // console.log(data.path);
       // this.result = this.base = data.path;
     this.path = data.path;
-    this.result = this.base + this.path;
+    this.result = this.base + encodeURIComponent(this.path);
     console.log(this.result);
   }
 

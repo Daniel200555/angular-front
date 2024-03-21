@@ -10,6 +10,8 @@ import { DomSanitizer } from '@angular/platform-browser';;
 import { Environment } from '../environment';
 import { Observable, Subject } from 'rxjs';
 import {LocalStorageService} from "../local-storage.service";
+import {UploadFileComponent} from "../upload-file/upload-file.component";
+import {UploadFolderComponent} from "../upload-folder/upload-folder.component";
 
 
 @Component({
@@ -30,7 +32,7 @@ export class HomeComponent {
   private nickcookie;
   private password;
   // private blobs: Array<FileTemp> = new Array();
-  base = "http://192.168.2.101:8989/stream?title=";
+  base = "http://192.168.2.102:8989/stream?title=";
 
   constructor(private localStorage: LocalStorageService, private sanitizer: DomSanitizer,private matDialog: MatDialog, private serviceFtp: FtpService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
     this.nickcookie = this.localStorage.getItem("nickname");
@@ -93,10 +95,16 @@ export class HomeComponent {
     });
   }
 
+  downloadFile(file: FileInfo) {
+    const baseLink = 'http://' + this.env.ipServer + ':8989/download'
+    const temp = '?path=' + file.path + '&name=' + file.name;
+    window.open(baseLink + encodeURIComponent(temp), '_blank');
+  }
+
   open(file: FileInfo) {
     if(file.isDirectory) {
       console.log(file.path);
-      window.open('http://'+ this.env.ipServer +'/home?nickname=' + this.nickname + '&path=' + file.path, '_self');
+      window.open('http://'+ this.env.ipHost +'/home?nickname=' + this.nickname + '&path=' + file.path, '_self');
     }
     if(file.isFile) {
       if (file.format === 'VIDEO') {
@@ -182,7 +190,42 @@ export class HomeComponent {
     this.serviceFtp.deleteDir(file.path).subscribe(data => {
 
     });
-    window.open('http://' + this.env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.path, '_self')
+    // window.open('http://' + this.env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.path, '_self')
   }
 
+  deleteFile(file: FileInfo) {
+    this.serviceFtp.deleteFile(file.path).subscribe(
+      (event: any) => {
+        if (typeof (event) === 'object') {
+
+        }
+      }
+    );
+    // window.open('http://' + this.env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.path, '_self')
+  }
+
+  uploadOnlyFile() {
+    const dialogRef = this.matDialog.open(UploadFileComponent, {
+      width: '60%',
+      height: '60%',
+      data: {
+        path: this.path
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog result: ${result}')
+    });
+  }
+
+  uploadDirectory() {
+    const dialogRef = this.matDialog.open(UploadFolderComponent, {
+      width: '60%',
+      height: '60%'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Dialog result: ${result}')
+    });
+  }
+
+  protected readonly encodeURIComponent = encodeURIComponent;
 }
