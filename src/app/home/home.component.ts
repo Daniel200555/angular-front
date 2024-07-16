@@ -12,6 +12,8 @@ import { Observable, Subject } from 'rxjs';
 import {LocalStorageService} from "../local-storage.service";
 import {UploadFileComponent} from "../upload-file/upload-file.component";
 import {UploadFolderComponent} from "../upload-folder/upload-folder.component";
+import {MongoFileService} from "../mongo-file.service";
+import {FileData} from "../file-data";
 
 
 @Component({
@@ -25,6 +27,7 @@ export class HomeComponent {
   fileInfo: FileInfo = new FileInfo();
   down: FileInfo[];
   filesInfo: FileInfo[];
+  fileData: FileData[];
   public temp = [];
   nickname: string;
   path: string;
@@ -34,7 +37,7 @@ export class HomeComponent {
   // private blobs: Array<FileTemp> = new Array();
   base = "http://192.168.2.102:8989/stream?title=";
 
-  constructor(private localStorage: LocalStorageService, private sanitizer: DomSanitizer,private matDialog: MatDialog, private serviceFtp: FtpService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
+  constructor(private fileDataService: MongoFileService, private localStorage: LocalStorageService, private sanitizer: DomSanitizer,private matDialog: MatDialog, private serviceFtp: FtpService, private router: Router, private route: ActivatedRoute, private dialog: MatDialog) {
     this.nickcookie = this.localStorage.getItem("nickname");
     this.password = this.localStorage.getItem("password");
     // if (this.cookieService.get('check') && ) {
@@ -46,7 +49,7 @@ export class HomeComponent {
       if (this.nickcookie !== this.nickname) {
         router.navigate(['']);
       }
-      this.getAll(this.path);
+      this.getAll(this.nickname, this.path);
     } else {
       router.navigate(['']);
     }
@@ -56,12 +59,16 @@ export class HomeComponent {
 
   }
 
-  getAll(path: string) {
-    this.serviceFtp.getFileInfoList(path).subscribe( data => {
-      console.log(data);
-      // data.sort((a,b) => a.name.localeCompare(b.name));
-      // console.log(data);
-      this.filesInfo = data;
+  getAll(nickname: string, dir: string) {
+    // this.serviceFtp.getFileInfoList(path).subscribe( data => {
+    //   console.log(data);
+    //   // data.sort((a,b) => a.name.localeCompare(b.name));
+    //   // console.log(data);
+    //   this.filesInfo = data;
+    // })
+    this.fileDataService.getFileDataList(nickname, dir).subscribe( data => {
+      console.log(data.length);
+      this.fileData = data;
     })
   }
 
@@ -101,16 +108,16 @@ export class HomeComponent {
     window.open(baseLink + encodeURIComponent(temp), '_blank');
   }
 
-  open(file: FileInfo) {
-    if(file.isDirectory) {
-      console.log(file.path);
-      window.open('http://'+ this.env.ipHost +'/home?nickname=' + this.nickname + '&path=' + file.path, '_self');
+  open(file: FileData) {
+    if(file.format === 'NULL') {
+      console.log(file.dir);
+      window.open('http://'+ this.env.ipHost +'/home?nickname=' + this.nickname + '&path=' + file.dir, '_self');
     }
-    if(file.isFile) {
-      if (file.format === 'VIDEO') {
-        this.openVideo(file.link);
-      } else if (file.format === 'PICTURE') {
-        this.openPicture(file.link);
+    if(!file.isFile) {
+      if (file.type === 'VIDEO') {
+        this.openVideo(file.dir);
+      } else if (file.type === 'PICTURE') {
+        this.openPicture(file.dir);
       }
     }
   }
@@ -171,9 +178,9 @@ export class HomeComponent {
   }
 
 
-  download(file: FileInfo) {
+  download(file: FileData) {
     if (file.isFile) {
-    } else if (file.isDirectory) {
+    } else if (!file.isFile) {
       // this.router.navigate(['compress'], {
       //   queryParams: {
       //     'user': this.nickname,
@@ -181,7 +188,7 @@ export class HomeComponent {
       //     'path': file.path
       //   }
       // });
-      window.open('http://' + this.env.ipServer + '/compress?user=' + this.nickname + '&name=' + file.name + '&path=' + file.path,'_blank')
+      window.open('http://' + this.env.ipServer + '/compress?user=' + this.nickname + '&name=' + file.filename + '&path=' + file.dir,'_blank')
     }
   }
 
@@ -193,14 +200,10 @@ export class HomeComponent {
     // window.open('http://' + this.env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.path, '_self')
   }
 
-  deleteFile(file: FileInfo) {
-    this.serviceFtp.deleteFile(file.path).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-
-        }
-      }
-    );
+  deleteFile(file: FileData) {
+    this.fileDataService.deleteFile(this.nickname, file.dir).subscribe( data => {
+      window.open('http://'+ this.env.ipHost +'/home?nickname=' + this.nickname + '&path=/', '_self');
+    });
     // window.open('http://' + this.env.ipServer + '/home?nickname=' + this.nickname + '&path=' + this.path, '_self')
   }
 
@@ -209,6 +212,7 @@ export class HomeComponent {
       width: '60%',
       height: '60%',
       data: {
+        nickname: this.nickname,
         path: this.path
       }
     });

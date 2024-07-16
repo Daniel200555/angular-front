@@ -16,7 +16,7 @@ export class VideoComponent {
 
   private path: string;
   private title: string;
-  private base = 'http://'+ this.env.ipServer +':8989/stream/video?title=';
+  private base = 'http://'+ this.env.ipServer +':8980/stream/video?title=';
   result: string;
 
   // constructor(private ftpService: FtpService, private route: ActivatedRoute, private titleService: Title) {
@@ -39,7 +39,7 @@ export class VideoComponent {
   constructor(public dialogRef: MatDialogRef<VideoComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public data: {path: string}) {
       // console.log(data.path);
       // this.result = this.base = data.path;
-    this.path = data.path;
+    this.path = '/' + data.path;
     this.result = this.base + encodeURIComponent(this.path);
     console.log(this.result);
   }
